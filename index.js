@@ -2,7 +2,7 @@ const axios = require("axios");
 require("dotenv").config();
 const SHOP = process.env.SHOPIFY_STORE;
 const TOKEN = process.env.SHOPIFY_ACCESS_TOKEN;
-
+//const TOKEN = process.env.SHOPIFY_ACCESS_TOKEN;
 
 async function fetchProducts() {
   try {
