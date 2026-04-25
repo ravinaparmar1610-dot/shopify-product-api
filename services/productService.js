@@ -35,18 +35,3 @@ export async function fetchShopifyProducts() {
     console.error(error.response?.data || error.message);
   }
 }
-
-export async function fetchProductsAxios() {
-  try {
-    const response = await axios.get(`https://${SHOP}/admin/api/${VERSION}/products.json`, {
-      headers: {
-        "X-Shopify-Access-Token": TOKEN,
-        "Content-Type": "application/json",
-      },
-    });
-
-    return response.data.products;
-  } catch (error) {
-    console.error(error.response?.data || error.message);
-  }
-}
