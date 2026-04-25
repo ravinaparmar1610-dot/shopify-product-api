@@ -1,9 +1,9 @@
 import express from "express";
 import multer from "multer";
 import { fetchShopifyProducts } from "../services/productService.js";
-import { createProductsBulk, getProducts } from "../controllers/productController.js";
+import { createProductsBulk, getProducts, productsSyncToShopify, productSyncStatus } from "../controllers/productController.js";
 import {  uploadProductsCSV } from "../controllers/bulkProductUploadController.js";
-import { checkBulkStatus } from "../services/shopifyService.js";
+import { checkBulkStatus, processLatestBulk } from "../services/shopifyService.js";
 
 const router = express.Router();
 
@@ -13,8 +13,8 @@ const upload = multer({ dest: "uploads/" });
 router.get("/products", getProducts);
 router.post("/products/bulk", createProductsBulk);
 router.post("/products/upload", upload.single("file"), uploadProductsCSV);
-
-router.post("/products/bulk-upload-status", checkBulkStatus);
+router.post("/products/sync", productsSyncToShopify);
+router.post("/products/bulk-sync-status", productSyncStatus);
 
 // Shopify routes
 router.get("/shopify-products", async (req, res) => {

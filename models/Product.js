@@ -5,7 +5,7 @@ import mongoose from "mongoose";
 
 // Course Modal Schema
 const productSchema = new mongoose.Schema({
-  shopify_id: Number,
+  shopify_id: String,
   title: String,
   SKU: String,
   description: String,

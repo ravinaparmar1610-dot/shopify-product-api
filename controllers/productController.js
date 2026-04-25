@@ -3,6 +3,8 @@ import fs from "fs";
 import csv from "csv-parser";
 import FormData from "form-data";
 import Product from "../models/Product.js";
+import { processLatestBulk, syncInsertedProducts } from "../services/shopifyService.js";
+import BulkOperation from "../models/BulkOperation.js";
 
 export async function getProducts(req, res) {
   try {
@@ -50,7 +52,7 @@ export async function createProductsBulk(req, res) {
         },
       }));
 
-      // const failedDocs = failedIndexes.map((i) => products[i]);
+      const failedDocs = failedIndexes.map((i) => products[i]);
 
       const successCount = err.result?.nInserted || 0;
 
@@ -63,5 +65,31 @@ export async function createProductsBulk(req, res) {
     } else {
       res.status(500).json({ error: err.message });
     }
+  }
+}
+
+export async function productsSyncToShopify(req,res) {
+  try {
+    const products = await Product.find({ status: "pending" }).lean();
+    /***
+     * Synce DB products to Shopify
+     ** */
+    const bulkOperation =  await syncInsertedProducts(products);
+    
+    res.status(201).json(products);
+  } catch (err) {
+    console.log("err:", err);
+    res.status(500).json({ error: err.message });
+  }
+}
+
+
+export async function productSyncStatus(req,res) {
+  try {
+    const bulkStatus =  await processLatestBulk();
+    res.status(201).json(bulkStatus);
+  } catch (err) {
+    console.log("err:", err);
+    res.status(500).json({ error: err.message });
   }
 }

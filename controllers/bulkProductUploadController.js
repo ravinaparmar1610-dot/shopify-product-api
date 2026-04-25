@@ -30,17 +30,10 @@ export const uploadProductsCSV = async (req, res) => {
           const inserted = await Product.insertMany(results, {
             ordered: false,
           });
-          console.log("==>>> inserted", inserted);
-
-          /***
-           * Synce DB products to Shopify
-           ** */
-          const {id} =  await syncInsertedProducts(inserted);
 
           res.json({
             message: "Upload successful",
-            insertedCount: inserted.length,
-            bulkOperationId: id
+            insertedCount: inserted.length
           });
 
           // Optional: delete file
